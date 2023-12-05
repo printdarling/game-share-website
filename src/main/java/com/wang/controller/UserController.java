@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -38,7 +39,7 @@ public class UserController {
             return new Result(false,10002,"密码错误",null);
         }else {
             user.setPassword("");
-            return new Result(true,20000,"登录成功",user);
+            return new Result(true,20000,"登录成功",selectUser);
         }
     }
 
@@ -54,6 +55,14 @@ public class UserController {
         userMapper.insertUser(user);
         user.setPassword("");
         return new Result(true,20000,"注册成功",user);
+    }
+
+    @PostMapping("/allUsers")
+    public Result queryAllUsers(@RequestParam(defaultValue = "1") int pageNum,
+                                @RequestParam(defaultValue = "10") int pageSize){
+        List<User> users = userMapper.queryAllUsersByPage(pageNum-1, pageSize);
+
+        return new Result(true,20000,"查询成功",users);
     }
 
 

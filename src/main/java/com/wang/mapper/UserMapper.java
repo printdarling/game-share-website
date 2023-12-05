@@ -3,7 +3,10 @@ package com.wang.mapper;
 import com.wang.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -27,5 +30,8 @@ public interface UserMapper {
     User queryUserByUserName(String userName);
 
     @Select("select prince from user where id = #{id}")
-    double queryPriceByUserId(Integer id);
+    void queryPriceByUserId(Integer id);
+
+    @Select("select * from user limit #{pageNum}, #{pageSize}")
+    List<User> queryAllUsersByPage(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 }
