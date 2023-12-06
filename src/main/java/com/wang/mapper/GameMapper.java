@@ -31,7 +31,7 @@ public interface GameMapper {
     @Select("select * from game where prince = 0 limit #{pageNum} , #{pageSize}")
     List<Game> getAllFreeGamesByPage(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
-    @Select("select * from game where prince = 0 limit #{pageNum} , #{pageSize}")
+    @Select("select * from game where prince != 0 limit #{pageNum} , #{pageSize}")
     List<Game> getAllPayGamesByPage(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
     @Select("select * from game where id = #{id}")

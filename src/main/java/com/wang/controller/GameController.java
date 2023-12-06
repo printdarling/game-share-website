@@ -5,9 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.wang.entity.Game;
 import com.wang.entity.Result;
 import com.wang.mapper.GameMapper;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -45,8 +43,9 @@ public class GameController {
         return new Result(true, 20000,"查询成功", games);
     }
 
-    @PostMapping("/show")
-    public Result showGameById(@RequestParam(defaultValue = "1") int id){
+    @PostMapping("/showGameById")
+    public Result showGameById(@RequestParam("id") int id){
+        System.out.println("查询游戏id: "+id);
         Game game = gameMapper.queryGameById(id);
         return new Result(true, 20000,"查询成功", game);
     }
