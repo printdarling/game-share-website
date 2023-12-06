@@ -34,6 +34,18 @@ public interface GameMapper {
     @Select("select * from game where prince != 0 limit #{pageNum} , #{pageSize}")
     List<Game> getAllPayGamesByPage(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
+    @Select("select * from game where tittle like concat('%',#{tittle},'%')")
+    List<Game> queryGamesByTittle(@Param("tittle") String tittle);
+
     @Select("select * from game where id = #{id}")
     Game queryGameById(Integer id);
+
+    @Select("select count(*) from game")
+    Integer getAllGamesCount();
+
+    @Select("select count(*) from game where prince = 0")
+    Integer getFreeGamesCount();
+
+    @Select("select count(*) from game where prince != 0")
+    Integer getPayGamesCount();
 }

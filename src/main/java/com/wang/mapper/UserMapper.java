@@ -34,4 +34,23 @@ public interface UserMapper {
 
     @Select("select * from user limit #{pageNum}, #{pageSize}")
     List<User> queryAllUsersByPage(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+
+
+    @Select("select * from user where role=1 limit #{pageNum}, #{pageSize}")
+    List<User> queryAllAminUsersByPage(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+
+    @Select("select * from user where role!=1 limit #{pageNum}, #{pageSize}")
+    List<User> queryAllNormalUsersByPage(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+
+    @Select("select * from user where userName like concat('%',#{userName},'%')")
+    List<User> searchUsersByName(@Param("userName") String userName);
+
+    @Select("select count(*) from user")
+    Integer queryAllUserCount();
+
+    @Select("select count(*) from user where role=1")
+    Integer queryAdminUserCount();
+
+    @Select("select count(*) from user where role!=1")
+    Integer queryNormalUserCount();
 }

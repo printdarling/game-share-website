@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -63,6 +64,38 @@ public class UserController {
         List<User> users = userMapper.queryAllUsersByPage(pageNum-1, pageSize);
 
         return new Result(true,20000,"查询成功",users);
+    }
+
+    @PostMapping("/allAminUsers")
+    public Result queryAllAminUsers(@RequestParam(defaultValue = "1") int pageNum,
+                                @RequestParam(defaultValue = "10") int pageSize){
+        List<User> users = userMapper.queryAllAminUsersByPage(pageNum-1, pageSize);
+
+        return new Result(true,20000,"查询成功",users);
+    }
+
+    @PostMapping("/allNormalUsers")
+    public Result queryAllNormalUsers(@RequestParam(defaultValue = "1") int pageNum,
+                                @RequestParam(defaultValue = "10") int pageSize){
+        List<User> users = userMapper.queryAllNormalUsersByPage(pageNum-1, pageSize);
+
+        return new Result(true,20000,"查询成功",users);
+    }
+
+    @PostMapping("/searchUsersByName")
+    public Result searchUsersByName(@RequestParam("userName") String userName){
+        List<User> users = userMapper.searchUsersByName(userName);
+        return new Result(true,20000,"查询成功",users);
+    }
+
+    @PostMapping("/getUsersCount")
+    public Result getUsersCount(){
+        Integer allUserCount = userMapper.queryAllUserCount();
+        Integer adminUserCount = userMapper.queryAdminUserCount();
+        Integer normalUserCount = userMapper.queryNormalUserCount();
+        int[] userCount = {allUserCount,adminUserCount,normalUserCount};
+        System.out.println("用户数量:" +Arrays.toString(userCount));
+        return new Result(true, 20000,"查询成功", userCount);
     }
 
 

@@ -1,7 +1,5 @@
 package com.wang.controller;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.wang.entity.Game;
 import com.wang.entity.Result;
 import com.wang.mapper.GameMapper;
@@ -9,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -34,14 +33,23 @@ public class GameController {
         return new Result(true, 20000,"查询成功", games);
     }
 
+    @PostMapping("/findGamesByTitle")
+    public Result findGamesByTitle(@RequestParam("title") String title){
+        // 直接调用分页查询方法返回List
+        List<Game> games = gameMapper.queryGamesByTittle(title);
+        return new Result(true, 20000,"查询成功", games);
+    }
+
     @PostMapping("/getAllPayGamesByPage")
     public Result getAllPayGamesByPage(@RequestParam(defaultValue = "1") int pageNum,
                                         @RequestParam(defaultValue = "10") int pageSize){
         // 直接调用分页查询方法返回List
         List<Game> games = gameMapper.getAllPayGamesByPage(pageNum-1, pageSize);
-        System.out.println("免费游戏数量："+games.size());
+        System.out.println("积分游戏数量："+games.size());
         return new Result(true, 20000,"查询成功", games);
     }
+
+
 
     @PostMapping("/showGameById")
     public Result showGameById(@RequestParam("id") int id){
@@ -64,6 +72,16 @@ public class GameController {
             return new Result(true, 20000,"添加成功", null);
         }
         return new Result(false, 10001,"添加失败,发生错误", null);
+    }
+
+    @PostMapping("/getGamesCount")
+    public Result getGamesCount(){
+        Integer allGamesCount = gameMapper.getAllGamesCount();
+        Integer freeGamesCount = gameMapper.getFreeGamesCount();
+        Integer payGamesCount = gameMapper.getPayGamesCount();
+        int[] gameCount = {allGamesCount, freeGamesCount, payGamesCount};
+        System.out.println("游戏数量:" +Arrays.toString(gameCount));
+        return new Result(true, 20000,"查询成功", gameCount);
     }
 
 
