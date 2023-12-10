@@ -7,7 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -56,6 +59,29 @@ public class UserController {
         userMapper.insertUser(user);
         user.setPassword("");
         return new Result(true,20000,"注册成功",user);
+    }
+
+    //签到接口
+    @PostMapping("/mark")
+    public Result mark(@RequestParam("id") int id){
+        System.out.println("签到用户id: "+id);
+
+        // 获取当前时间
+        LocalDate now = LocalDate.now();
+        User user = userMapper.queryUserByUserId(id);
+        LocalDate lastSignTime = user.getMarkTime().toLocalDate();
+
+        System.out.println("当前时间: "+now);
+        System.out.println("比较");
+        System.out.println("上次签到时间:"+lastSignTime);
+
+        // 比较当前时间和上次签到时间是否同一天
+        if (now != lastSignTime) {
+            Integer result = userMapper.updateMarkTimeById(LocalDateTime.now(), id);
+            user.setMarkTime(LocalDateTime.now());
+            return new Result(true,20000,"签到成功",user);
+        }
+        return new Result(false,10001,"签到失败，今日已经签到！",null);
     }
 
     @PostMapping("/allUsers")

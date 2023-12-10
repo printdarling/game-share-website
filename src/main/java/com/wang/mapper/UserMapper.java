@@ -1,11 +1,10 @@
 package com.wang.mapper;
 
 import com.wang.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -53,4 +52,11 @@ public interface UserMapper {
 
     @Select("select count(*) from user where role!=1")
     Integer queryNormalUserCount();
+
+    /*
+     * 用户签到
+     * parms: userId
+     */
+    @Update("update user set markTime = #{now} where id = #{id}")
+    Integer updateMarkTimeById(@Param("now") LocalDateTime now, @Param("id") Integer id);
 }
