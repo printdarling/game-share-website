@@ -1,7 +1,9 @@
 package com.wang.controller;
 
+import com.wang.entity.Game;
 import com.wang.entity.Result;
 import com.wang.entity.User;
+import com.wang.mapper.GameMapper;
 import com.wang.mapper.UserMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,8 @@ public class UserController {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private GameMapper gameMapper;
 
     @RequestMapping("/")
     public String hello(){
@@ -71,17 +75,26 @@ public class UserController {
         User user = userMapper.queryUserByUserId(id);
         LocalDate lastSignTime = user.getMarkTime().toLocalDate();
 
-        System.out.println("当前时间: "+now);
-        System.out.println("比较");
-        System.out.println("上次签到时间:"+lastSignTime);
 
         // 比较当前时间和上次签到时间是否同一天
         if (now != lastSignTime) {
-            Integer result = userMapper.updateMarkTimeById(LocalDateTime.now(), id);
-            user.setMarkTime(LocalDateTime.now());
-            return new Result(true,20000,"签到成功",user);
+            userMapper.updateScoreById(10,id); //增加积分
+            userMapper.updateMarkTimeById(LocalDateTime.now(), id); //更新签到时间
+
+            //返回新的user对象
+            User user1 = userMapper.queryUserByUserId(id);
+            return new Result(true,20000,"签到成功",user1);
         }
         return new Result(false,10001,"签到失败，今日已经签到！",null);
+    }
+
+    @PostMapping("/buyGame")
+    public Result buyGameById(@RequestParam("gameId") int gameId,
+                              @RequestParam("userId") int userId){
+        Game game = gameMapper.queryGameById(gameId);
+        userMapper.updateScoreById(-game.getPrince(), userId);
+        User user = userMapper.queryUserByUserId(userId);
+        return new Result(true,20000,"购买成功",user);
     }
 
     @PostMapping("/allUsers")

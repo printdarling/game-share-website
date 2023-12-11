@@ -59,4 +59,7 @@ public interface UserMapper {
      */
     @Update("update user set markTime = #{now} where id = #{id}")
     Integer updateMarkTimeById(@Param("now") LocalDateTime now, @Param("id") Integer id);
+
+    @Update("update user set score = score + #{score} where id = #{id}")
+    Integer updateScoreById(@Param("score")Integer score, @Param("id") Integer id);
 }
