@@ -137,5 +137,38 @@ public class UserController {
         return new Result(true, 20000,"查询成功", userCount);
     }
 
+    @PostMapping("/addUser")
+    public Result addUser(@RequestBody User user){
+        System.out.println("接收到user: "+user);
+        int insertNums = userMapper.insertUser(user);
+        if (insertNums > 0){
+            return new Result(true,20000,"添加成功",null);
+        }else {
+            return new Result(false,10001,"添加失败",null);
+        }
+    }
+
+    @PostMapping("/deleteUserById")
+    public Result deleteUserById(@RequestParam("id") int id){
+        System.out.println("接收到id: "+id);
+        int deleteNums = userMapper.deleteUserById(id);
+        if (deleteNums > 0){
+            return new Result(true,20000,"删除成功",null);
+        }else {
+            return new Result(false,10001,"删除失败",null);
+        }
+    }
+
+    @PostMapping("/modifyUser")
+    public Result modifyUser(@RequestBody User user){
+        System.out.println("modeify: "+user);
+        Integer setNums = userMapper.updateUserById(user);
+        if (setNums > 0){
+            return new Result(true,20000,"修改成功",null);
+        }else {
+            return new Result(false,10001,"修改失败",null);
+        }
+    }
+
 
 }

@@ -1,10 +1,8 @@
 package com.wang.mapper;
 
 import com.wang.entity.Game;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -12,9 +10,9 @@ import java.util.List;
 public interface GameMapper {
 
     //增
-    @Insert("INSERT INTO game (tittle, prince, description, du_link, ali_link, quark_link, other_link) " +
-            "VALUES (#{tittle}, #{prince}, #{description}, #{du_link}, #{ali_link}, #{quark_link}, #{other_link})")
-    int addGame(Game game);
+    @Insert("INSERT INTO game (tittle,img_url, prince, description, du_link, ali_link, quark_link, other_link) " +
+            "VALUES (#{tittle},#{imgUrl}, #{prince}, #{description}, #{duLink}, #{aliLink}, #{quarkLink}, #{otherLink})")
+    int addGame(@RequestParam("game") Game game);
 
     //删
 
@@ -48,4 +46,10 @@ public interface GameMapper {
 
     @Select("select count(*) from game where prince != 0")
     Integer getPayGamesCount();
+
+    @Delete("delete from game where id = #{id}")
+    Integer deleteGameById(@Param("id") int id);
+
+    @Update("update game set tittle = #{tittle},img_url = #{imgUrl},prince = #{prince},description = #{description},du_link = #{duLink},ali_link = #{aliLink},quark_link =#{quarkLink},other_link = #{otherLink} where id = #{id}")
+    Integer updateGame(@RequestParam("game") Game game);
 }

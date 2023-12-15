@@ -2,6 +2,8 @@ package com.wang.mapper;
 
 import com.wang.entity.User;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,15 +12,18 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     //增
-    @Insert("insert into user(userName, password, email, score) VALUES (#user.userName, #user.password, #user.email, #user.score)")
-    int insertUser(User user);
+    @Insert("insert into user(userName, password, email, score,role,markTime,registerTime) VALUES (#{userName}, #{password}, #{email}, #{score},#{role},NOW(),NOW())")
+    int insertUser(@RequestParam("user") User user);
 
     //删
+    @Delete("delete from user where id = #{id}")
+    Integer deleteUserById(@Param("id") int id);
 
     //改
+    @Update("update user set userName = #{userName}, password = #{password}, email = #{email}, score = #{score},role = #{role} where id = #{id}")
+    Integer updateUserById(@RequestBody User user);
 
     //查
-
     @Select("select * from user where email = #{email}")
     User queryUserByEmail(String email);
 
