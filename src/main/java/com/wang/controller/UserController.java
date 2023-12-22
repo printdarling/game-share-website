@@ -61,8 +61,9 @@ public class UserController {
             return new Result(false,10004,"邮箱已存在",null);
         }
         userMapper.insertUser(user);
-        user.setPassword("");
-        return new Result(true,20000,"注册成功",user);
+        User selectUser = userMapper.queryUserByUserName(user.getUserName());
+        selectUser.setPassword("");
+        return new Result(true,20000,"注册成功",selectUser);
     }
 
     //签到接口
